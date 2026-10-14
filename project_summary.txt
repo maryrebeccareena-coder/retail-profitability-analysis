@@ -1,0 +1,66 @@
+RETAIL PROFITABILITY ANALYSIS - PROJECT SUMMARY
+Mary Rebecca Reena
+
+PROJECT IN ONE LINE
+Analysed 51,290 Global Superstore order lines (2011-2014) to find where the store loses money. Finding: no full-price order lost money; above a 20% discount almost every order does.
+
+TOOLS
+Python (Pandas, Google Colab), Google BigQuery (SQL), Power BI (Import mode), GitHub
+
+DATA CLEANING NOTES
+- Original: 51,290 rows, 24 columns
+- Missing values: only Postal Code (41,296 rows, 80.5%) -> column dropped
+- Duplicates found: 0
+- Dates converted from dd-mm-yyyy
+- Columns added: profit_margin, ship_days, order_year, order_month, season
+- Final: 51,290 rows, 28 columns
+- In BigQuery, a view (v_dashboard) adds discount_band and discount_band_order
+
+KEY NUMBERS
+Total sales            12,642,502
+Total profit            1,467,457   (margin 11.6%)
+Order lines losing money   12,544 of 51,290 (24.5%), none at full price
+
+Discount band | lines  | sales      | profit     | margin | lines losing money
+None          | 29,009 | 6,992,411  | +1,770,695 | 25.3%  | 0 (0%)
+1-20%         | 10,953 | 3,719,880  | +511,444   | 13.7%  | 2,364 (21.6%)
+21-40%        |  4,367 | 1,083,898  | -187,271   | -17.3% | 3,328 (76.2%)
+Above 40%     |  6,961 |   846,313  | -627,411   | -74.1% | 6,852 (98.4%)
+
+Above 20% discount combined: 11,328 lines (22% of lines, 15% of sales), loss about 815K (55% of total profit), about 90% of those lines lose money, and they make up 81% of all losing lines.
+
+TABLES (only sub-category with a loss)
+Sales 757,042 | profit -64,083 | margin -8.5% | average discount 29.1%
+None: +60,447 (23.1%) | 1-20%: +8,011 (5.0%) | 21-40%: -38,188 (-18.1%) | Above 40%: -94,353 (-76.7%)
+467 lines above 20% discount lost 132,541; up to 20% it earned +68,458.
+
+RECOMMENDATIONS
+1. Cap discounts at 20%, manager approval above that
+2. Stop deals above 40% first (98.4% lose money)
+3. Review Tables pricing and discount policy
+
+LIMITATIONS (say these in interviews, they show good judgement)
+- No inventory data, so no inventory turnover or slow-mover analysis
+- Discounts and losses go together; the data cannot prove the discount alone caused every loss
+- The 815K figure is an upper bound, not a forecast
+- Seasonality was not analysed in depth (season filter and monthly trend chart are on the dashboard)
+
+2-MINUTE INTERVIEW PITCH (put this in your own words)
+"I analysed 51,290 order lines from a global retailer to find out where it loses money. I cleaned the data in Python, ran the analysis in BigQuery with SQL, and built a Power BI dashboard. The store made 12.6 million in sales and 1.5 million in profit, but one in four order lines lost money. When I grouped orders by discount level, I found that no full-price order lost money, while above a 20% discount about 90% of orders did. Those orders lost around 815 thousand, more than half of the total profit. Tables was the only sub-category that lost money overall. My recommendation is to cap discounts at 20% with approval above that. A limitation is that the data has no inventory information, so I could not look at stock turnover."
+
+INTERVIEW QUESTIONS TO PREPARE
+- Why Import mode and not DirectQuery? Small static dataset; Import is faster and keeps working after the sandbox table expires.
+- Why COUNTIF / SAFE_DIVIDE? COUNTIF counts rows meeting a condition; SAFE_DIVIDE avoids divide-by-zero errors.
+- Why drop the postal code? 80.5% was empty, mostly outside the US.
+- Why bands instead of raw discount? Easier to read and shows the 20% tipping point.
+- What would you do with more data? Add cost and inventory data, test a discount cap on past orders, analyse seasonality.
+- Does this prove discounts cause losses? No, it shows a strong association; costly items may also be discounted more.
+
+UPLOAD CHECKLIST
+[ ] Take dashboard screenshot -> images/dashboard.png
+[ ] Screenshot the SQL result tables -> images/
+[ ] Save Power BI file -> dashboard/retail_profitability_dashboard.pbix
+[ ] Add small text boxes under each chart on the dashboard (takeaways)
+[ ] Paste report/report.md into Google Docs, add 2 images, check it is 2 pages, download as PDF -> report/
+[ ] Upload everything to a new public GitHub repo: retail-profitability-analysis
+[ ] Put the repo link on your resume and LinkedIn
